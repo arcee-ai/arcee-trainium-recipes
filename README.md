@@ -40,21 +40,23 @@ python3 -m pip install -r requirements.txt
     
     `NUM_NEURONCORES` shows the total number of cores per Trainium node and `WORLD_SIZE` indicates the total number of nodes, which is automatically calculated by the bash file. 
     
-    You can change `--logging_interval 10` to control per how many steps log the performance of the model. 
+    You can change `--logging_interval` to control per how many steps log the performance of the model. 
     
     For checkpointing, you can change the `--checkpoint_dir`, `--num_kept_checkpoint`, and `--checkpoint_freq` (in terms of the number of steps). 
     
     To enable training from a pretrained model, you can enable `--load_pretrained_checkpoint` and pass the pretrained checkpoint directory to `--pretrained_checkpoint_dir` argument.
 
-* When the checkpoint Download/Conversion job is complete, run `submit_precompilation_job.sh` to precompile the graphs and populate the Neuron cache
+* When the checkpoint download/conversion job is complete, run `submit_precompilation_job.sh` to precompile the graphs and populate the Neuron cache
 when the precompilation job is complete, run `submit_training_job.sh` to launch the training job.
 
-
+* When model training is done, you can convert it back from sharded format to Hugging Face executable format for inference and testing. For this, you can set the `input_dir` (directory of the sharded model), `output_dir` (target directory for the full model), and `tp_size` in the `convert_to_full_model.sh` file and then, execute `submit_convert_to_full.sh` bash file.
 
 
 **Note:** You will need to change the number of nodes in the precompilation/training slurm launch scripts to match your cluster.
 
 **Note:** Remember to delete the files under `neuron_compile_cache` and `__pycache__` folder before starting to train a new model.
+
+**Note:** After submitting a job, you can track the logs in `slumr-XX.out` files, which will automatically appear under your working directory. To check if the nodes are idle or activate, you can use `sinfo` command and for more detailed information about the nodes, you can use `scontrol show nodes` and check the state of each node. When running is done, the nodes will return back to idle mode dynamically and except for the Head Node, you don't have to manually stop them. You can find the JOBID by running `squeue`. In order to stop a job, you can run `scancel <JOBID>`
 
 
 ## Additional Resources
