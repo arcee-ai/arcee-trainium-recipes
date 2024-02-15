@@ -34,7 +34,7 @@ python3 -m pip install -r requirements.txt
     
     Depending on the number of epochs you plan to do training for, you have to calculate the total number of steps per epoch. For this, you can run `dp_steps_per_epoch.py` script after setting `dataset_path`, `global_batch_size`, `mini_batch_size`, `cores`, `nodes`, and `tensor_parallel_size` in line with the configurations in `tp_zero1_llama2_7b_hf_pretrain.sh` file. Then, you can update the `TOTAL_STEPS` parameter to the total number of steps per epoch multiplied the by total number of epochs. 
     
-    We set `WARMUP_STEPS` equal to ~1% of the total number of steps per epoch as suggested in [this paper](https://openreview.net/pdf?id=pg7PUJe0Tl). Warm-up steps can help stabilize the training process by gradually introducing larger learning rates. If the warm-up period is too short, the learning rate may not have enough time to increase to an appropriate level, leading to underfitting. If the warm-up period is too long, the model may overfit to the training data during the initial stages of training. 
+    We set `LR` equal to 1.5e-4 and `WARMUP_STEPS` equal to ~1% of the total number of steps per epoch as suggested in [this paper](https://openreview.net/pdf?id=pg7PUJe0Tl). Warm-up steps can help stabilize the training process by gradually introducing larger learning rates. If the warm-up period is too short, the learning rate may not have enough time to increase to an appropriate level, leading to underfitting. If the warm-up period is too long, the model may overfit to the training data during the initial stages of training. 
     
     Make sure that the `SEQ_LEN` matches the `max_position_embeddings` in `config.json` file. It should be equal to`4096` in this example. 
     
