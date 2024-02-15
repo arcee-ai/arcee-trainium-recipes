@@ -5,7 +5,7 @@ The repository contains all the set-up required to execute trainium training job
 
 ## Model Training
 
-First, convert a Hugging Face pretrained checkpoint to the NxD sharded format, and then begin training with the pretrained weights. This example uses `meta-llama/Llama-2-7b-hf`. It is recommended running this code from `/fsx/` on your ParallelCluster. Example: we used /fsx/llama2 as our working directory.
+First, convert a Hugging Face pretrained checkpoint to the NxD sharded format, and then, begin training with the pretrained weights. This example uses `meta-llama/Llama-2-7b-hf`. It is recommended running this code from `/fsx/` on your ParallelCluster. Example: we used /fsx/llama2 as our working directory.
 
 To run this code:
 
@@ -13,7 +13,11 @@ To run this code:
 
 * Update the `DATA_PATH` in `tp_zero1_llama2_7b_hf_pretrain.sh` to point to your tokenized dataset (tokenized and packed data resulted from the data preprocessing part).
 
-* Make sure you have the `aws_neuron_venv_pytorch` virtualenv activated and install the dependecies using the `requirements.txt` file.
+* Make sure you have the `aws_neuron_venv_pytorch` virtualenv activated and install the dependecies by running the following commands:
+
+`python -m pip install neuronx_distributed --extra-index-url https://pip.repos.neuron.amazonaws.com`
+
+`python3 -m pip install -r requirements.txt`
 
 * Run `huggingface-cli login` and enter your HF token, which will be required to download the `meta-llama/Llama-2-7b-hf` weights.
 
@@ -29,4 +33,5 @@ when the precompilation job is complete, run `submit_training_job.sh` to launch 
 
 
 ## Additional Resources
+Reference 1: [Link](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/neuronx-distributed/tutorials/training_llama2_7b.html) 
 
