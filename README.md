@@ -30,10 +30,3 @@ when the precompilation job is complete, run `submit_training_job.sh` to launch 
 
 ## Additional Resources
 
-dataset_path =  "~/examples_datasets/packed-hf-training-dataset-89B"#'~/datasets/'
-global_batch_size = 2048
-mini_batch_size = 1 # Example mini-batch size
-cores = 32  # Example number of cores
-nodes = 16  # Example number of nodes
-tensor_parallel_size = 8  # Example tensor parallel size
-gradient_accumulation_steps = (global_batch_size / (mini_batch_size * (cores*nodes)/(tensor_parallel_size))) # Example gradient accumulation steps
