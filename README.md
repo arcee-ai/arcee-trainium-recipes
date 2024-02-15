@@ -15,9 +15,13 @@ To run this code:
 
 * Make sure you have the `aws_neuron_venv_pytorch` virtualenv activated and install the dependecies by running the following commands:
 
-`python -m pip install neuronx_distributed --extra-index-url https://pip.repos.neuron.amazonaws.com`
+```
+python -m pip install neuronx_distributed --extra-index-url https://pip.repos.neuron.amazonaws.com
+```
 
-`python3 -m pip install -r requirements.txt`
+```
+python3 -m pip install -r requirements.txt
+```
 
 * Run `huggingface-cli login` and enter your HF token, which will be required to download the `meta-llama/Llama-2-7b-hf` weights.
 
