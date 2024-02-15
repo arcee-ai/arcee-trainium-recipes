@@ -2,6 +2,18 @@
 The repository contains all the set-up required to execute trainium training jobs. 
 
 ## Data Preprocessing
+For setting up Trainium CPT, it's crucial to have a tokenized and properly packed Hugging Face dataset that can be directly loaded from disk. In our experimental setup, we followed these steps:
+1. **Text Extraction and Tokenization**:
+   - Initially, we extracted the entire text from papers and tokenized them in a distributed setting.
+
+2. **Packing Tokenized Data**:
+   - We then packed the tokenized data in a format where each example contains 4096 tokens.
+   - It's important to note that during the tokenization process, if the tokenized text exceeds 4096 tokens, it will be split into multiple tokens. Conversely, if it's fewer than 4096 tokens, it will be appended with other shorter examples.
+
+3. **Saving the Dataset**:
+   - Finally, we saved the dataset to disk using the Hugging Face dataset's library function `save_to_disk`.
+
+These preprocessing steps ensure that the data is formatted correctly for use with Trainium CPT. For further details on the preprocessing pipeline, refer to the documentation or code provided.
 
 ## Model Training
 
