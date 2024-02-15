@@ -56,9 +56,10 @@ when the precompilation job is complete, run `submit_training_job.sh` to launch 
 
 **Note:** Remember to delete the files under `neuron_compile_cache` and `__pycache__` folder before starting to train a new model.
 
-**Note:** After submitting a job, you can track the logs in `slumr-XX.out` files, which will automatically appear under your working directory. To check if the nodes are idle or activate, you can use `sinfo` command and for more detailed information about the nodes, you can use `scontrol show nodes` and check the state of each node. When running is done, the nodes will return back to idle mode dynamically and except for the Head Node, you don't have to manually stop them. You can find the JOBID by running `squeue`. In order to stop a job, you can run `scancel <JOBID>`
+**Note:** After submitting a job, you can track the logs in `slumr-XX.out` files, which will automatically appear under your working directory. To check if the nodes are idle or activate, you can use `sinfo` command and for more detailed information about the nodes, you can use `scontrol show nodes` and check the state of each node. When running is done, the nodes will return back to idle mode dynamically and except for the Head Node, you don't have to manually stop them. You can find the JOBID by running `squeue`. In order to stop a job, you can run `scancel <JOBID>`.
 
 
 ## Additional Resources
 Reference 1: [Link](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/neuronx-distributed/tutorials/training_llama2_7b.html) 
+Reference 2: [Link] (https://docs.google.com/document/d/1531RU5a9UnE3JNPC7R7iETLe5rdgBfdrIwrJoIQ0tWg/edit?usp=sharing)
 
