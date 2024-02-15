@@ -27,13 +27,34 @@ python3 -m pip install -r requirements.txt
 
 * Run `submit_ckpt_download_convert_job.sh`, which will launch a slurm job to download and convert the `meta-llama/Llama-2-7b-hf` checkpoint. The code for this job is in `download_and_convert_llama_ckpt.sh`. We recommend using a slurm job to run this as the head node of the cluster doesn’t have much RAM and will likely throw out of memory (OOM) error. When this job is done, you should see a directory named `llama2_7b_hf_sharded` in your working dir.
 
-* Before training the model, you can set all the configurations in the `tp_zero1_llama2_7b_hf_pretrain.sh` file. Depending on the number of epochs you plan to do training for, you have to calculate the total number of steps per epoch. For this, you can run `dp_steps_per_epoch.py` script after setting `dataset_path`, `global_batch_size`, `mini_batch_size`, `cores`, `nodes`, and `tensor_parallel_size` in line with the configurations in `tp_zero1_llama2_7b_hf_pretrain.sh` file. Then, you can update the `TOTAL_STEPS` parameter to the total number of steps per epoch multiplied the by total number of epochs. 
+* Before training the model, you can set all the configurations in the `tp_zero1_llama2_7b_hf_pretrain.sh` file:
+    You can set the [tensor parallelism](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/neuronx-distributed/tensor_parallelism_overview.html#tensor-parallelism-overview) degree (`TP_DEGREE`), which should be a power of 2 and for better performance, choose the number of key value heads to be divisible by the TP size as the key and value projections should be sharded accross the TP ranks. 
+
+    You can also update the global-batch size (`GBS`) (Larger GBS may result in smoother gradients and more stable updates to the model parameters, potentially leading to faster convergence), and mini-batch (`MBS`) (Increasing MBS helps with speeding up the training speed, but for now, only `MBS=1` is supported). 
+    
+    Depending on the number of epochs you plan to do training for, you have to calculate the total number of steps per epoch. For this, you can run `dp_steps_per_epoch.py` script after setting `dataset_path`, `global_batch_size`, `mini_batch_size`, `cores`, `nodes`, and `tensor_parallel_size` in line with the configurations in `tp_zero1_llama2_7b_hf_pretrain.sh` file. Then, you can update the `TOTAL_STEPS` parameter to the total number of steps per epoch multiplied the by total number of epochs. 
+    
+    We set `WARMUP_STEPS` equal to ~1% of the total number of steps per epoch as suggested in [this paper](https://openreview.net/pdf?id=pg7PUJe0Tl). Warm-up steps can help stabilize the training process by gradually introducing larger learning rates. If the warm-up period is too short, the learning rate may not have enough time to increase to an appropriate level, leading to underfitting. If the warm-up period is too long, the model may overfit to the training data during the initial stages of training. 
+    
+    Make sure that the `SEQ_LEN` matches the `max_position_embeddings` in `config.json` file. It should be equal to`4096` in this example. 
+    
+    `NUM_NEURONCORES` shows the total number of cores per Trainium node and `WORLD_SIZE` indicates the total number of nodes, which is automatically calculated by the bash file. 
+    
+    You can change `--logging_interval 10` to control per how many steps log the performance of the model. 
+    
+    For checkpointing, you can change the `--checkpoint_dir`, `--num_kept_checkpoint`, and `--checkpoint_freq` (in terms of the number of steps). 
+    
+    To enable training from a pretrained model, you can enable `--load_pretrained_checkpoint` and pass the pretrained checkpoint directory to `--pretrained_checkpoint_dir` argument.
 
 * When the checkpoint Download/Conversion job is complete, run `submit_precompilation_job.sh` to precompile the graphs and populate the Neuron cache
 when the precompilation job is complete, run `submit_training_job.sh` to launch the training job.
 
 
+
+
 **Note:** You will need to change the number of nodes in the precompilation/training slurm launch scripts to match your cluster.
+
+**Note:** Remember to delete the files under `neuron_compile_cache` and `__pycache__` folder before starting to train a new model.
 
 
 ## Additional Resources
