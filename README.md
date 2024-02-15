@@ -61,5 +61,6 @@ when the precompilation job is complete, run `submit_training_job.sh` to launch 
 
 ## Additional Resources
 Reference 1: [Link](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/neuronx-distributed/tutorials/training_llama2_7b.html) 
-Reference 2: [Link] (https://docs.google.com/document/d/1531RU5a9UnE3JNPC7R7iETLe5rdgBfdrIwrJoIQ0tWg/edit?usp=sharing)
+
+Reference 2: [Link](https://docs.google.com/document/d/1531RU5a9UnE3JNPC7R7iETLe5rdgBfdrIwrJoIQ0tWg/edit?usp=sharing)
 
