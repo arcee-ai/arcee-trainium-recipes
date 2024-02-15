@@ -58,8 +58,8 @@ python3 -m pip install -r requirements.txt
     
     To enable training from a pretrained model, you can enable `--load_pretrained_checkpoint` and pass the pretrained checkpoint directory to `--pretrained_checkpoint_dir` argument.
 
-* When the checkpoint download/conversion job is complete, run `submit_precompilation_job.sh` to precompile the graphs and populate the Neuron cache
-when the precompilation job is complete, run `submit_training_job.sh` to launch the training job.
+* When the checkpoint download/conversion job is complete, run `submit_precompilation_job.sh` to precompile the graphs and populate the Neuron cache.
+When the precompilation job is complete, run `submit_training_job.sh` to launch the training job.
 
 * When model training is done, you can convert it back from sharded format to Hugging Face executable format for inference and testing. For this, you can set the `input_dir` (directory of the sharded model), `output_dir` (target directory for the full model), and `tp_size` in the `convert_to_full_model.sh` file and then, execute `submit_convert_to_full.sh` bash file.
 
