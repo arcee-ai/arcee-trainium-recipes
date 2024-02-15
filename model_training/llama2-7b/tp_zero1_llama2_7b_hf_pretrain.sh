@@ -29,7 +29,7 @@ TOTAL_STEPS=31800 #for 3 epochs = 3*10600
 # warmup steps
 WARMUP_STEPS=100 #ratio=0.01*total steps for one epoch 0.01*10600 ~ 100
 # learning rate
-LR=1.5e-4 #1.5e-4 based on the CPT paper but based on LLama2 paper they are using 3e-4 for pretraining and 2e-5 for SFT. Here we are not pretraining from scratch so I would go for 2e-5
+LR=1.5e-4 #1.5e-4 based on the CPT paper but based on LLama2 paper they are using 3e-4 for pretraining and 2e-5 for SFT.
 # model path
 MODEL_PATH=$SCRIPT_DIR
 # data path

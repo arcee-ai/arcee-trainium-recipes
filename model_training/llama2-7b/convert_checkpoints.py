@@ -200,20 +200,13 @@ def load_full(args):
     full_state = torch.load(args.input_dir)
     return full_state
 
-
-# def load_partial_xser(args, tp_rank, pp_rank):
-#     load_dir = os.path.join(args.input_dir, "tp_rank_{:02d}_pp_rank_{:02d}".format(tp_rank, pp_rank))
-#     partial_state = xser.load(load_dir)
-#     return partial_state
-
 def load_partial_xser(args, tp_rank, pp_rank):
-    # load_dir = os.path.join(args.input_dir, "tp_rank_{:02d}_pp_rank_{:02d}".format(tp_rank, pp_rank))
     load_dir = os.path.join(args.input_dir, "dp_rank_00_tp_rank_{:02d}_pp_rank_{:02d}.pt".format(tp_rank, pp_rank))
     partial_state = xser.load(load_dir)
     return partial_state
 
 def load_partial_no_xser(args, tp_rank, pp_rank):
-    load_dir = os.path.join(args.input_dir, "dp_rank_00_tp_rank_{:02d}_pp_rank_{:02d}.pt".format(tp_rank, pp_rank)) #changed (removed checkpoint) but add dp rank as arg later TODO
+    load_dir = os.path.join(args.input_dir, "dp_rank_00_tp_rank_{:02d}_pp_rank_{:02d}.pt".format(tp_rank, pp_rank))
     partial_state = torch.load(load_dir)
     return partial_state
 

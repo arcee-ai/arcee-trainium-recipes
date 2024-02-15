@@ -5,10 +5,6 @@ def compute_steps_per_epoch(dataset_path, mini_batch_size, cores, nodes, tensor_
     # Load the dataset
     dataset = load_from_disk(dataset_path)
 
-    # arrow_files = [file for file in os.listdir(dataset_path) if file.endswith(".arrow")]
-    # dataset = concatenate_datasets([Dataset.from_file(dataset_path+arrow_file) for arrow_file in arrow_files])
-    # print("dataset: ", dataset)
-
     # Count the number of training examples
     num_training_examples = len(dataset)
 
@@ -28,7 +24,7 @@ def compute_steps_per_epoch(dataset_path, mini_batch_size, cores, nodes, tensor_
     return steps_per_epoch
 
 # Example usage
-dataset_path =  "~/examples_datasets/packed-hf-training-dataset-89B"#'~/datasets/'
+dataset_path =  "~/examples_datasets/packed-hf-training-dataset-89B"
 global_batch_size = 2048
 mini_batch_size = 1 # Example mini-batch size
 cores = 32  # Example number of cores
@@ -39,27 +35,3 @@ gradient_accumulation_steps = (global_batch_size / (mini_batch_size * (cores*nod
 steps_per_epoch = compute_steps_per_epoch(dataset_path, mini_batch_size, cores, nodes, tensor_parallel_size)/ gradient_accumulation_steps
 
 print(f"Steps per epoch: {steps_per_epoch}")
-
-#GBS=128
-# Number of training examples: 37429629
-# Steps per epoch: 292418.9765625
-
-#GBS=256
-# Number of training examples: 37429629
-# Steps per epoch: 146209.48828125 
-
-#GBS=1024
-# Number of training examples: 37429629
-# Steps per epoch: 36552.3720703125
-
-#GBS=1024  mock dataset
-# Number of training examples: 1588925
-# Steps per epoch: 1551.6845703125
-
-# GBS=2048
-# Number of training examples: 21708072
-# Steps per epoch: 10599.64453125
-
-
-
-#scp -i   arcee-dev-trn-cluster.pem  ubuntu@ec2-54-80-251-40.compute-1.amazonaws.com:/fsx/updated_llama2_pretrain_loading/output/neuron_tblogs_021224_2331_bfloat16_w64_lr2e-05_bs1_acc16_warmup100_max5000_xlaTrue_trn1n.32xlarge/events.out.tfevents.1707780707.compute1-dy-queue1-i1-1.117695.0  ./my-logs-new
