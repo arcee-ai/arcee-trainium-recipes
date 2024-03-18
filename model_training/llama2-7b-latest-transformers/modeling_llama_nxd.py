@@ -227,6 +227,9 @@ class LlamaAttention(LlamaAttentionHF):
         self.num_key_value_groups = self.num_heads // self.num_key_value_heads
         self.pretraining_tp = config.pretraining_tp
         self.max_position_embeddings = config.max_position_embeddings
+        # had to add these variables to make the code compatible with the new modelling_llama.py
+        self.rope_theta = config.rope_theta
+        self.cache_position = None
 
         if not hasattr(config, "kv_shared_group_size"):
             config.kv_shared_group_size = 1
@@ -401,8 +404,8 @@ class LlamaAttention(LlamaAttentionHF):
             attn_weights = None
 
         return attn_output, attn_weights, past_key_value
-
-
+# Scott's help
+# Seems like this has to be changed
 class LlamaDecoderLayer(LlamaDecoderLayerHF):
     def __init__(self, config: LlamaConfig):
         nn.Module.__init__(self)
@@ -556,6 +559,7 @@ class LlamaModel(LlamaModelHF):
                     None,
                 )
             else:
+          
                 layer_outputs = decoder_layer(
                     hidden_states,
                     attention_mask=attention_mask,

@@ -224,9 +224,7 @@ def get_model(flags):
         config.selective_checkpoint_enabled = True
     xm.master_print(config)
     model = LlamaForCausalLM(config)
-    model.load_state_dict(torch.load("/fsx/updated_llama2_pretrain_loading/llama_from_mistral_7b_it/pytorch_model.bin"), strict=True)
-    xm.master_print(model)
-    exit("====")
+
     def get_sin_cos_matrix(config):
         head_dim = config.hidden_size // config.num_attention_heads
         base = 1000000 #10000
