@@ -227,9 +227,8 @@ class LlamaAttention(LlamaAttentionHF):
         self.num_key_value_groups = self.num_heads // self.num_key_value_heads
         self.pretraining_tp = config.pretraining_tp
         self.max_position_embeddings = config.max_position_embeddings
-        # had to add these variables to make the code compatible with the new modelling_llama.py
+        # had to add theta variable to make the code compatible with the new modelling_llama.py
         self.rope_theta = config.rope_theta
-        self.cache_position = None
 
         if not hasattr(config, "kv_shared_group_size"):
             config.kv_shared_group_size = 1
@@ -317,6 +316,7 @@ class LlamaAttention(LlamaAttentionHF):
         past_key_value: Optional[Tuple[torch.Tensor]] = None,
         output_attentions: bool = False,
         use_cache: bool = False,
+        cache_position= None, # newly added to compatible with the new modelling_llama.py 
     ) -> Tuple[torch.Tensor, Optional[torch.Tensor], Optional[Tuple[torch.Tensor]]]:
         bsz, q_len, _ = hidden_states.size()
 
@@ -363,8 +363,14 @@ class LlamaAttention(LlamaAttentionHF):
         kv_seq_len = key_states.shape[-2]
         if past_key_value is not None:
             kv_seq_len += past_key_value[0].shape[-2]
-        cos, sin = self.rotary_emb(value_states, seq_len=kv_seq_len)
-        query_states, key_states = apply_rotary_pos_emb(query_states, key_states, cos, sin, position_ids)
+        
+
+        # cos, sin = self.rotary_emb(value_states, seq_len=kv_seq_len)
+        # query_states, key_states = apply_rotary_pos_emb(query_states, key_states, cos, sin, position_ids)
+
+        # computation of rotary embeddings with the new transformers version
+        cos, sin = self.rotary_emb(value_states, position_ids)
+        query_states, key_states = apply_rotary_pos_emb(query_states, key_states, cos, sin)
 
         if past_key_value is not None:
             # reuse k, v, self_attention
