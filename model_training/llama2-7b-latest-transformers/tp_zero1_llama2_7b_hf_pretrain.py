@@ -227,7 +227,7 @@ def get_model(flags):
 
     def get_sin_cos_matrix(config):
         head_dim = config.hidden_size // config.num_attention_heads
-        base = 1000000 #10000
+        base = 10000
         inv_freq = 1.0 / (base ** (torch.arange(0, head_dim, 2).float() / head_dim))
         t = torch.arange(config.max_position_embeddings, dtype=inv_freq.dtype)
         freqs = torch.einsum("i,j->ij", t, inv_freq)
@@ -237,13 +237,13 @@ def get_model(flags):
     # Here we make sure we use the same sine and cosine matrices for all layers.
     # Making use of same tensors would make the CSE algorithm eliminate the lookup call
     # from layers, keeping only lookup from first layer.
-    # with torch.no_grad():
-    #     cos, sin = get_sin_cos_matrix(config)
-    #     for layer in model.model.layers:
-    #         # print(layer.self_attn.rotary_emb.cos_cached)
-    #         # print(layer.self_attn.rotary_emb.cos_cached.shape)
-    #         layer.self_attn.rotary_emb.cos_cached = cos
-    #         layer.self_attn.rotary_emb.sin_cached = sin
+    with torch.no_grad():
+        cos, sin = get_sin_cos_matrix(config)
+        for layer in model.model.layers:
+            # print(layer.self_attn.rotary_emb.cos_cached)
+            # print(layer.self_attn.rotary_emb.cos_cached.shape)
+            layer.self_attn.rotary_emb._cos_cached = cos
+            layer.self_attn.rotary_emb._sin_cached = sin
     xm.master_print(model)
     return model
 
